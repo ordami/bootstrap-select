@@ -1813,7 +1813,7 @@
       if (version.major < 4) {
         newElement.classList.add('bs3');
 
-        if (newElement.parentNode.classList.contains('input-group') &&
+        if (newElement.parentNode.classList && newElement.parentNode.classList.contains('input-group') &&
             (newElement.previousElementSibling || newElement.nextElementSibling) &&
             (newElement.previousElementSibling || newElement.nextElementSibling).classList.contains('input-group-addon')
         ) {
@@ -1846,7 +1846,6 @@
           menuInnerInner = document.createElement('ul'),
           divider = document.createElement('li'),
           dropdownHeader = document.createElement('li'),
-          li = document.createElement('li'),
           a = document.createElement('a'),
           text = document.createElement('span'),
           header = this.options.header && this.$menu.find('.' + classNames.POPOVERHEADER).length > 0 ? this.$menu.find('.' + classNames.POPOVERHEADER)[0].cloneNode(true) : null,
@@ -1869,8 +1868,15 @@
       dropdownHeader.className = 'dropdown-header';
 
       text.appendChild(document.createTextNode('\u200b'));
-      a.appendChild(text);
-      li.appendChild(a);
+
+      var li;
+      if (this.selectpicker.current.elements.length > 0) {
+        li = this.selectpicker.current.elements[0];
+      } else {
+        li = document.createElement('li');
+        a.appendChild(text);
+        li.appendChild(a);
+      }
       dropdownHeader.appendChild(text.cloneNode(true));
 
       if (this.selectpicker.view.widestOption) {
@@ -2997,9 +3003,9 @@
       this.options = config;
 
       this.checkDisabled();
+      this.buildData();
       this.setStyle();
       this.render();
-      this.buildData();
       this.buildList();
       this.setWidth();
 
